@@ -31,6 +31,7 @@ router.get('/', (req, res, next)=>{
 
     admin.dashboard().then(data => {
         res.render("admin/index", admin.getParams(req, {
+            user: req.session.user,
             data
         }))
     }).catch(err => {
