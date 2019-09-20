@@ -166,15 +166,21 @@
     deleteMsg: 'Deseja realmente excluir o usuário ${data.name}?',
     listeners: {
       buttonClick: (btn, data, e)=>{
+
+        document.querySelector("#modal-update-password form [name=id]").value = data.id
+
         $("#modal-update-password").modal("show")
       }
     }
 
   })
 
-  document.querySelector("#modal-update-password form").save().then(results =>{
-    window.location.reload()
-  }).catch(err=>{
-    alert("Não foi possivel alterar a senha!")
+  document.querySelector("#modal-update-password form").save({
+    success: () =>{
+      window.location.reload()
+    },
+    failure: err =>{
+      alert(err)
+    }
   })
 </script>

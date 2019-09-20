@@ -6,6 +6,8 @@ moment.locale('pt-BR')
 var users = require('../inc/users')
 var admin = require('../inc/admin')
 var menus = require('../inc/menus')
+var contacts = require('../inc/contacts')
+var emails = require('../inc/emails')
 var reservations = require('../inc/reservations')
 
 router.use(function (req, res, next){
@@ -41,11 +43,34 @@ router.get('/', (req, res, next)=>{
 })
 
 router.get('/contacts', (req, res, next)=>{
-    res.render('admin/contacts', admin.getParams(req))
+    contacts.getContacts().then(data=>{
+        res.render('admin/contacts', admin.getParams(req, {
+            data
+        }))        
+    })
+})
+
+router.delete('/contacts/:id', (req, res, next)=>{
+    contacts.delete(req.params.id).then(results=>{
+        res.send(results)
+    }).catch(err=>{
+        res.send(err)
+    })
 })
 
 router.get('/emails', (req, res, next)=>{
-    res.render('admin/emails', admin.getParams(req))
+    emails.getEmails().then(data=>{
+        res.render('admin/emails', admin.getParams(req,{
+            data
+        }))
+    })
+})
+router.delete('/emails/:id', (req, res, next)=>{
+    emails.delete(req.params.id).then(results=>{
+        res.send(results)
+    }).catch(err=>{
+        res.send(err)
+    })
 })
 
 router.post("/login", (req, res, next)=>{
@@ -141,6 +166,17 @@ router.post('/users', (req, res, next)=>{
         res.send(results)
     }).catch(err =>{
         res.send(err)
+    })
+
+})
+router.post('/users/password-change', (req, res, next)=>{
+
+    users.changePassword(req).then(results =>{
+        res.send(results)
+    }).catch(err =>{
+        res.send({
+            error: err
+        })
     })
 
 })
